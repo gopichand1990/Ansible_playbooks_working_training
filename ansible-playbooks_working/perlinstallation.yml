@@ -1,0 +1,16 @@
+---
+ - name: To install perl5 on node machines
+   hosts: all
+  
+   pre_tasks:
+     - name: Start of debug message
+       debug:
+         msg: "debug message"
+   
+   roles:
+     - gopi.perl5-install
+ 
+   post_tasks:
+     - name: end of debug message
+       debug:
+         msg: "perl installation completed"

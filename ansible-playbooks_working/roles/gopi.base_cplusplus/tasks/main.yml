@@ -1,0 +1,19 @@
+---
+
+- name: yum install packages for C++ development
+  when: ansible_os_family == 'RedHat'
+  yum: name={{item}} state=present
+  with_items: "{{ cplusplusrpms }}"
+  tags:
+    - cplusplus
+
+- name: apt install packages for C++ development
+  when: ansible_os_family == 'Debian'
+  apt:
+    pkg: "{{ item }}"
+    update_cache: yes
+    cache_valid_time: 86400
+    state: present
+  with_items: "{{ cplusplusapts }}"
+  tags:
+    - cplusplus

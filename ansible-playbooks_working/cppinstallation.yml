@@ -1,0 +1,16 @@
+---
+ - name: To install cpp o host machines
+   hosts: all
+
+   pre_tasks:
+     - name: debug messgae
+       debug:
+         msg: "To start cpp installation o n host machines"
+   
+   roles:
+     - gopi.base_cplusplus
+ 
+   post_tasks:
+     - name: debug message
+       debug:
+         msg: "completing cpp installaton on node machines"

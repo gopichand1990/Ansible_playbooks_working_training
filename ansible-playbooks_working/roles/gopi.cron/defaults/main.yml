@@ -1,0 +1,11 @@
+# Copyright (c) Ontic. (http://www.ontic.com.au). All rights reserved.
+# See the COPYING file bundled with this package for license details.
+
+---
+
+cron_packages:
+cron_service_name:
+cron_service_state: 'started'
+cron_service_enabled: yes
+cron_tasks:
+cron_vars:

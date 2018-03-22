@@ -1,0 +1,59 @@
+---
+- name: "get users HOME"
+  getent:
+    database: passwd
+    key: "{{ node_user }}"
+    split: ":"
+  tags:
+    - nodejs
+
+- name: "set node_user_home variable"
+  set_fact:
+    "node_user_home": "{{ getent_passwd[node_user][4] }}"
+  tags:
+    - nodejs
+
+- name: "install dependencies"
+  apt:
+    pkg: "{{ item }}"
+    state: present
+    update_cache: true
+    cache_valid_time: "{{ apt_cache_valid_time }}"
+  with_items: "{{ node_software_dependencies }}"
+  tags:
+    - nodejs
+
+- name: "clonning nvm repo"
+  git:
+    repo: "https://github.com/creationix/nvm.git"
+    dest: "{{ node_user_home }}/.nvm"
+    version: "{{ node_nvm_version }}"
+  become_user: "{{ node_user }}"
+  tags:
+    - nodejs
+
+- name: "source nvm.sh script"
+  template:
+    src: "nvm.sh.j2"
+    dest: "/etc/profile.d/nvm.sh"
+    owner: "root"
+    group: "root"
+    mode: 0755
+  tags:
+    - nodejs
+
+- name: "install node"
+  shell: "/bin/bash -lc 'nvm install {{ node_version }}'"
+  args:
+    creates: "{{ node_user_home }}/.nvm/versions/node/{{ node_version }}"
+  become_user: "{{ node_user }}"
+  register: nvm_install_result
+  tags:
+    - nodejs
+
+- name: "set default node version"
+  shell: "/bin/bash -lc 'nvm alias default {{ node_version }}'"
+  become_user: "{{ node_user }}"
+  when: nvm_install_result.changed
+  tags:
+    - nodejs

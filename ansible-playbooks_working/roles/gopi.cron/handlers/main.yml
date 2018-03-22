@@ -1,0 +1,11 @@
+# Copyright (c) Ontic. (http://www.ontic.com.au). All rights reserved.
+# See the COPYING file bundled with this package for license details.
+
+---
+
+- name: 'restart cron'
+  become: yes
+  service:
+    name: '{{ cron_service_name }}'
+    state: 'restarted'
+  when: 'cron_service_enabled'

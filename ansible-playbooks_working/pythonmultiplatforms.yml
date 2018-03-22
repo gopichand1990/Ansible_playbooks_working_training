@@ -1,0 +1,20 @@
+---
+ - name: To configure python in such a way that it will execute all versions of python can be executed
+   hosts: all
+
+   pre_tasks:
+     - name: start debug messag
+       debug:
+         msg: "mpython multi version environment  creation started"
+
+   roles:
+     - gopi.compile-python
+   vars:
+     - python_26: true
+     - python_27: true
+     - python_35: true
+
+   post_tasks:
+     - name: debug message end
+       debug:
+         msg: "installation completed successfully"

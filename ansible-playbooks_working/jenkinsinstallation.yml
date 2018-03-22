@@ -1,0 +1,17 @@
+---
+#works on debian 7.3 or higher
+ - name: TO install jenkins on host machines works on debian 7.3 or higher
+   hosts: all
+  
+   pre_tasks:
+     - name: debug message
+       debug:
+         msg: "installation started"
+   
+   roles:
+     - gopi.jenkins
+ 
+   post_tasks:
+     - name: debug message
+       debug:
+         msg: "installation finished"

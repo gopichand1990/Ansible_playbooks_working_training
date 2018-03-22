@@ -1,0 +1,18 @@
+---
+#Need to be careful while executing tghis playbook this can even change password or disable ssh connection to remote machine once you run this playbook.
+ - name: To configure security setttings on Enterprise linux using ansible
+   hosts: all
+    
+   pre_tasks:
+     - name: debug message
+       debug:
+         msg: "configuring security setting on enterprise linux"
+  
+   roles:
+     - gopi.security-settings
+ 
+   post_tasks:
+     - name: debug message
+       debug:
+         msg: "completed configuring security settings on enterprise linux"
+    

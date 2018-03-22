@@ -1,0 +1,3 @@
+---
+# defaults file for proxify in seconds
+proxify_dl_timeout : 300

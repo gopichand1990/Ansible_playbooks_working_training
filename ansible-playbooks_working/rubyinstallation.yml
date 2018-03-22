@@ -1,0 +1,19 @@
+---
+#works only on ubuntu machines
+ - name: To install ruby on host machines(works only for ubuntu machines)
+   hosts: all
+
+   pre_tasks:
+     - name: debug message
+       debug:
+         msg: "ruby installation started"
+
+   roles:
+     - gopi.ruby
+   ignore_errors: true
+
+   post_tasks:
+     - name: debug message
+       debug:
+         msg: "ruby installation finished"
+

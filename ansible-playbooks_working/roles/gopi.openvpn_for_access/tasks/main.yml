@@ -1,0 +1,104 @@
+---
+# tasks file for openvpn_for_access
+- name: Update apt cache
+  apt: update_cache=yes cache_valid_time=3600
+
+- name: Install openvpn
+  apt: name=openvpn
+
+- name: ensure log dir exists 
+  file: path=/var/log/openvpn state=directory
+
+# - name: ensure /opt/easynat exists
+#   file: path=/opt/easynat state=directory
+
+# PKI
+- name: add apt key
+  apt_key: url=http://packages.rcrowley.org/keyring.gpg
+
+- name: Determine lsb_release
+  shell: lsb_release -sc
+  register: lsb_release
+
+- name: Install certified apt repository
+  apt_repository: repo="deb http://packages.rcrowley.org {{ lsb_release.stdout }} main"
+
+- name: Install certified
+  apt: name=certified
+
+- name: Install git
+  apt: name=git
+
+- name: Create git repo for pki
+  shell: 'git init {{ openvpn_pki_path }} && cd {{ openvpn_pki_path }} && git config user.email "user@host.com" && git config user.name "user" creates={{ openvpn_pki_path}}/.git'
+
+- name: Create the Certificate Authority certificate
+  command: 'certified-ca --password="{{ openvpn_pki_password }}" --db={{ openvpn_pki_path }} C="US" ST="CO" L="Boulder" O="OpenVPN" CN="OpenVPN" creates={{ openvpn_pki_path }}/certs/ca.crt'
+
+- name: Create server crt and key
+  command: 'certified --password="{{ openvpn_pki_password }}" --db={{ openvpn_pki_path }} CN="{{ openvpn_name }}" creates={{ openvpn_pki_path }}/certs/{{ openvpn_name}}.crt'
+
+- name: Create dh directory
+  file: path={{ openvpn_pki_path}}/dh state=directory
+
+- name: Generate dh
+  command: openssl gendh -out {{ openvpn_pki_path }}/dh/{{ openvpn_name }}.pem  1024 creates={{ openvpn_pki_path }}/dh/{{ openvpn_name}}.pem
+
+- name: Get ca certs content
+  command: cat "{{ openvpn_pki_path }}/certs/ca.crt" "{{ openvpn_pki_path }}/certs/root-ca.crt"
+  register: ca_certs_content
+
+- name: Get server cert content
+  shell: cat {{ openvpn_pki_path }}/certs/{{ openvpn_name }}.crt
+  register: server_cert_content
+
+- name: Get server key content
+  shell: cat {{ openvpn_pki_path }}/private/{{ openvpn_name }}.key
+  register: server_key_content
+
+- name: Get dh content
+  shell: cat {{ openvpn_pki_path }}/dh/{{ openvpn_name }}.pem
+  register: dh_content
+
+
+
+- name: Create client crt and key
+  command: 'certified --password="{{ openvpn_pki_password }}" --db={{ openvpn_pki_path }} CN="{{ openvpn_name }}_client_01" creates={{ openvpn_pki_path }}/certs/{{ openvpn_name }}_client_01.crt'
+
+- name: fetch client cert
+  fetch: src={{ openvpn_pki_path }}/certs/{{ openvpn_name }}_client_01.crt dest=/tmp/{{ openvpn_name }}_client_01.crt flat=yes fail_on_missing=yes validate_checksum=yes
+
+- name: fetch client key
+  fetch: src={{ openvpn_pki_path }}/private/{{ openvpn_name }}_client_01.key dest=/tmp/{{ openvpn_name }}_client_01.key flat=yes fail_on_missing=yes validate_checksum=yes
+
+
+
+- name: Create server config files
+  template: src=tls-server.conf dest=/etc/openvpn/{{ openvpn_name }}.conf
+
+- name: restart openvpn
+  action: service name=openvpn state=restarted
+
+# - name: set network in easynat rule file
+#   action: lineinfile dest=/opt/easynat/rules.cnf 
+#                      regexp="{{ openvpn_subnet }}" 
+#                      line="{{ openvpn_subnet }}/{{ openvpn_netmask }}" 
+#                      state=present
+#                      create=yes
+#   notify:
+#     - setup nat rules
+
+
+
+- name: Copy get_public_ip.sh
+  copy: src=get_public_ip.sh dest=/tmp/ owner=root group=root mode=0755
+
+- name: Get public ip
+  command: /tmp/get_public_ip.sh {{ possible_public_ips }}
+  register: server_public_ip
+
+- name: Create client conf (to local file)
+  # sudo: no
+  local_action: template src="tls-client.conf" dest=/tmp/{{ openvpn_name }}_client_01.conf
+
+# - include: nat.yml

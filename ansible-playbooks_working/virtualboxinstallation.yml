@@ -1,0 +1,16 @@
+---
+ - name: To install virtual box on node machines
+   hosts: all
+  
+   pre_tasks:
+     - name: start of debug message
+       debug:
+         msg: "start of virtualbox installation"
+
+   roles:
+     - gopi.virtualbox
+
+   post_tasks:
+     - name: End of debug message
+       debug:
+         msg: "End of virtualbox installation"

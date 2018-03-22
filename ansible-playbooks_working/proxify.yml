@@ -1,0 +1,16 @@
+---
+ - name: To configure network proxy on linux based machines
+   hosts: all
+
+   pre_tasks:
+     - name: debug message start
+       debug:
+         msg: "proxy configuring started"
+   
+   roles: 
+     - gopi.proxify
+
+   post_tasks:
+     - name: End of debug message
+       debug:
+         msg: "End of Proxy configuration"

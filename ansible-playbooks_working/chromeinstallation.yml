@@ -1,0 +1,15 @@
+---
+ - name: To install chrome  
+   hosts: all
+   pre_tasks:
+     - name: install chrome on host machines
+       debug:
+         msg: chrome installtion started
+  
+   roles:
+     - gopi.chrome
+  
+   post_tasks:
+     - name: completing installation
+       debug:
+         msg: chrome installation finished

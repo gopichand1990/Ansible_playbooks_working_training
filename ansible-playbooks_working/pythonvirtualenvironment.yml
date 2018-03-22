@@ -1,0 +1,17 @@
+---
+ - name: TO install python virtual environment
+   hosts: all
+
+   pre_tasks:
+     - name: debug message start
+       debug:
+         msg: "started creating python virtual environmnet"
+   
+   roles:
+     - gopi.pip
+     - gopi.virtualenv
+  
+   post_tasks:
+     - name: debug message end
+       debug:
+         msg: "completed creating virtual python environment"

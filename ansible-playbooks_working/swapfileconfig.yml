@@ -1,0 +1,16 @@
+---
+ - name: To configure swap file in linux based systems
+   hosts: all
+
+   pre_tasks:
+     - name: starting debug message
+       debug:
+         msg: "started configuring swap file"
+   
+   roles:
+     - gopi.swapfile
+
+   post_tasks:
+     - name: Ending debug message
+       debug:
+         msg: "completed configuring swap file"

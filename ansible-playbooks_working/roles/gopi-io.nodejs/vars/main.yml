@@ -1,0 +1,13 @@
+---
+ansible_become: yes
+
+apt_cache_valid_time: 86400
+
+node_software_dependencies:
+  - git
+  - curl
+  - build-essential
+  - libssl-dev
+  - apt-transport-https
+  - python-software-properties
+

@@ -1,0 +1,6 @@
+---
+# handlers file for openvpn_for_access
+- name: restart openvpn
+  action: service name=openvpn state=restarted
+- name: setup nat rules
+  command: /opt/easynat/setup_nat

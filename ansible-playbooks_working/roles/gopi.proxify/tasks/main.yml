@@ -1,0 +1,33 @@
+---
+- name: resolve platform specific vars
+  include_vars: "{{item}}"
+  with_first_found:
+    - "{{ansible_distribution}}-{{ansible_distribution_release}}.yml"
+    - "{{ansible_distribution}}.yml"
+    - "{{ansible_os_family}}.yml"
+
+- name: include package manager specific vars
+  include_vars: "{{proxify_pkg_mgr}}.yml"
+    
+- name: templated environment stuffs
+  become: yes
+  become_user: root
+  with_items:
+    - etc/environment
+    - etc/profile.d/proxyenv.sh
+    - etc/profile.d/java-proxyenv.sh
+    - etc/wgetrc
+    - '{{proxify_pkg_templates}}'
+  register: proxify_proxified
+  when: proxify_it
+  template:
+    src: '{{item}}.j2'
+    dest: /{{item}}
+    mode: '0644'
+
+- name: post proxify package update/upgrade...
+  when: proxify_it and proxify_proxified|changed
+  become: yes
+  become_user: root
+  with_items: '{{proxify_pkg_update_cmds}}'
+  command: '{{item}}'

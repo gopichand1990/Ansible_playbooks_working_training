@@ -1,0 +1,40 @@
+# Copyright (c) Ontic. (http://www.ontic.com.au). All rights reserved.
+# See the COPYING file bundled with this package for license details.
+
+---
+
+- name: 'Cron | Configure variables.'
+  become: yes
+  cron:
+    name: '{{ item.name }}'
+    backup: '{{ item.backup | default(omit) }}'
+    cron_file: '{{ item.cron_file | default(omit) }}'
+    insertafter: '{{ item.insertafter | default(omit) }}'
+    insertbefore: '{{ item.insertbefore | default(omit) }}'
+    state: '{{ item.state | default(omit) }}'
+    user: '{{ item.user | default(omit) }}'
+    value: '{{ item.value | default(omit) }}'
+  with_items: '{{ cron_vars }}'
+  when: 'cron_vars | default(None) != None'
+
+- name: 'Cron | Configure tasks.'
+  become: yes
+  cron:
+    backup: '{{ item.backup | default(omit) }}'
+    cron_file: '{{ item.cron_file | default(omit) }}'
+    day: '{{ item.day | default(omit) }}'
+    disabled: '{{ item.disabled | default(omit) }}'
+    env: '{{ item.env | default(omit) }}'
+    hour: '{{ item.hour | default(omit) }}'
+    insertafter: '{{ item.insertafter | default(omit) }}'
+    insertbefore: '{{ item.insertbefore | default(omit) }}'
+    job: '{{ item.job | default(omit) }}'
+    minute: '{{ item.minute | default(omit) }}'
+    month: '{{ item.month | default(omit) }}'
+    name: '{{ item.name | default(omit) }}'
+    special_time: '{{ item.special_time | default(omit) }}'
+    state: '{{ item.state | default(omit) }}'
+    user: '{{ item.user | default(omit) }}'
+    weekday: '{{ item.weekday | default(omit) }}'
+  with_items: '{{ cron_tasks }}'
+  when: 'cron_tasks | default(None) != None'

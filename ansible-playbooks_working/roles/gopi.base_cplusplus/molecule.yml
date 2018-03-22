@@ -1,0 +1,14 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+docker:
+  containers:
+    - name: base_cplusplus
+      image: milcom/centos7-systemd
+      image_version: latest
+      ansible_groups:
+        - group1
+verifier:
+  name: testinfra

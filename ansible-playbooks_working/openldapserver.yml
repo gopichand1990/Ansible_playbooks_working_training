@@ -1,0 +1,21 @@
+---
+ - name: To install ldap server on remote machines
+   hosts: all
+   sudo: true
+  
+   pre_tasks:
+     - name: Debug message started
+       debug:
+         msg: "started installing ldap server"
+
+   roles:
+     - role: gopi.openldap_server
+       openldap_server_domain_name: example.com
+       openldap_server_rootpw: passmw
+       openldap_server_enable_ssl: false
+  
+   post_tasks:
+     - name: debug message ending
+       debug:
+         msg: "completd installing ldap server"
+       

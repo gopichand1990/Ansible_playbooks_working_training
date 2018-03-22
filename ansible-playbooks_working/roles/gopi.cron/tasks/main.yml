@@ -1,0 +1,59 @@
+# Copyright (c) Ontic. (http://www.ontic.com.au). All rights reserved.
+# See the COPYING file bundled with this package for license details.
+
+---
+
+- name: 'Cron | Include OS-specific variables.'
+  include_vars: '{{ ansible_os_family }}.yml'
+  tags:
+    - 'cron'
+    - 'cron-package'
+    - 'cron-configure'
+    - 'cron-service'
+    - 'package'
+    - 'configure'
+    - 'service'
+
+- name: 'Cron | Define Cron service name.'
+  set_fact:
+    cron_service_name: '{{ cron_default_service_name }}'
+  when: 'not cron_service_name'
+  tags:
+    - 'cron'
+    - 'cron-package'
+    - 'cron-configure'
+    - 'cron-service'
+    - 'package'
+    - 'configure'
+    - 'service'
+
+- name: 'Cron | Define Cron packages.'
+  set_fact:
+    cron_packages: '{{ cron_default_packages }}'
+  when: 'not cron_packages'
+  tags:
+    - 'cron'
+    - 'cron-package'
+    - 'cron-configure'
+    - 'cron-service'
+    - 'package'
+    - 'configure'
+    - 'service'
+
+- include: 'package.yml'
+  tags:
+    - 'cron'
+    - 'cron-package'
+    - 'package'
+
+- include: 'configure.yml'
+  tags:
+    - 'cron'
+    - 'cron-configure'
+    - 'configure'
+
+- include: 'service.yml'
+  tags:
+    - 'cron'
+    - 'cron-service'
+    - 'service'

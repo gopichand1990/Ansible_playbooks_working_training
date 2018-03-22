@@ -1,0 +1,21 @@
+---
+ - name: create bash aliases in shell in linux
+   hosts: all
+  
+   pre_tasks:
+     - name: start debug message
+       debug:
+         msg: "creating aliases for commands in shell"
+ 
+
+   roles:
+     - { gopi.bash-aliases, become: yes }
+       bashalias_aliases:
+           - { alias: "ll", command: "ls -hl" }
+           - { alias: "la", command: "ls -hal" }
+           - { alias: "git-log", command: 'git log "$(pwd)"' }
+  
+   post_tasks:
+     - name: ENding debug message
+       debug:
+         msg: "completed creating alias for commands in shell"

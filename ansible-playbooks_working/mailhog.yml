@@ -1,0 +1,19 @@
+---
+#dependent roles is daemonize
+#make sure that gcc is installed on remote machine if not try this command `yum install make automake gcc-c++ kernel-devel`
+ - name: TO install mailhog on host machines  to redirect system mails to Configure your application to use MailHog for SMTP delivery View messages in the web UI, or retrieve them with the JSON API Optionally release messages to real SMTP servers for delivery
+
+   hosts: all
+   pre_tasks:
+     - name: TO debug mailhog installation
+       debug:
+         msg: "started installing mailhog"
+
+   roles:
+     - gopi.daemonize
+     - gopi.mailhog
+  
+   post_tasks:
+     - name: To debug mailhog installation
+       debug:
+         msg: "completed installing mailhog"

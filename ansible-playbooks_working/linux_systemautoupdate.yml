@@ -1,0 +1,17 @@
+---
+ - name: TO autoupdate linux based systems using ansible
+   hosts: all
+  
+   pre_tasks:
+     - name: debug message started
+       debug:
+         msg: "Autoupdate enabling on linux systems"
+
+   roles:
+     - gopi.linux_systemautoupdate
+
+   post_tasks:
+     - name: Ending debug message
+       debug:
+         msg: "Autoupdating completed on host machines"
+

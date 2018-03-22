@@ -1,0 +1,17 @@
+---
+ - name: Installs an iptables-based firewall for Linux. Supports both IPv4 (iptables) and IPv6 (ip6tables) for security on linux based machines.\
+   hosts: all
+ 
+   pre_tasks:
+     - name: starting debug message
+       debug:
+         msg: "installing iptables based firewall"
+
+   roles:
+     - geerlingguy.firewall
+    
+    
+   post_tasks:
+     - name: Ending debug message
+       debug:
+         msg: "completed installing firewall"

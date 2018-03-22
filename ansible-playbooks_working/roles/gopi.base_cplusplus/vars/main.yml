@@ -1,0 +1,31 @@
+---
+
+cplusplusrpms:
+  - autoconf
+  - automake
+  - binutils-devel
+  - binutils-static
+  - bison
+  - boost-devel
+  - clang
+  - cmake
+  - elfutils-devel
+  - elfutils-libelf-devel
+  - file-devel
+  - gcc
+  - gcc-c++
+  - kernel-devel
+  - libstdc++-devel
+  - libstdc++-static
+  - libtool
+  - ncurses-devel
+
+cplusplusapts:
+  - build-essential
+  - autoconf
+  - automake
+  - g++
+  - gcc
+  - gfortran
+  - libc6-dev
+  - make

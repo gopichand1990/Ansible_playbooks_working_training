@@ -1,0 +1,14 @@
+---
+- name: restart sshd
+  service:
+    name: "{{ ssh_service_name }}"
+    state: restarted
+    enabled: true
+
+- name: restart audit daemon
+  shell: /sbin/service auditd restart
+  args:
+    warn: no
+
+- name: reload sysrq
+  command: "/sbin/sysctl -w kernel.sysrq={{ magic_sysrq }}"

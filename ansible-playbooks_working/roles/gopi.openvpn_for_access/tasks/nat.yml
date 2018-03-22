@@ -1,0 +1,21 @@
+---
+#NAT
+- name: Ensure iptables is installed
+  action: apt pkg=iptables state=installed
+  tags: nat
+
+- name: Enforce ipv4.ip_forward
+  action: sysctl name=net.ipv4.ip_forward value=1 state=present
+  tags: nat
+
+- name: make sure /opt/easynat exists
+  action: file path=/opt/easynat/ state=directory
+  tags: nat
+
+- name: install easynat
+  action: template src=opt/easynat/setup_nat dest=/opt/easynat/setup_nat mode=755
+  tags: nat
+
+- name: make sure easynat is in rc.local
+  action: lineinfile dest=/etc/rc.local insertafter="^#" regexp="/opt/easynat/setup_nat" line="/opt/easynat/setup_nat" state=present
+  tags: nat

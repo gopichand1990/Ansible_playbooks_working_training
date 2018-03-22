@@ -1,0 +1,18 @@
+---
+#works on debian and ubuntu os
+ - name: TO install nodejs on host machines
+   hosts: all
+
+   pre_tasks:
+     - name: debug message
+       debug:
+         msg: "started installing nodejs"
+
+   roles:
+     - gopi-io.nodejs
+
+   post_tasks:
+     - name: debug message
+       debug:
+         msg: "completed installation successfully"
+  

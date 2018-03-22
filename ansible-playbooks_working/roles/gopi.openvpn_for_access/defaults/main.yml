@@ -1,0 +1,9 @@
+---
+# defaults file for openvpn_for_access
+openvpn_pki_path: "/etc/openvpn/pki"
+openvpn_protocol: 'udp'
+openvpn_port: 1194
+openvpn_subnet: 10.3.1.0
+openvpn_netmask: 255.255.255.0
+openvpn_cert_file: "keys/{{ openvpn_name }}_client_01.crt"
+openvpn_key_file: "keys/{{ openvpn_name }}_client_01.key"

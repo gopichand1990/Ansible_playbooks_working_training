@@ -1,0 +1,16 @@
+---
+ - name: To enable or disable yum plugins using ansible
+   hosts: all
+
+   pre_tasks:
+     - name: start debug message
+       debug:
+         msg: "Enable or disable yum plugins started"
+ 
+   roles:
+     - { role: gopi.toggle-yum-plugin, disable_plugins: ['fastestmirror', 'rhnplugin']}
+
+   post_tasks:
+     - name: Ending debug message
+       debug:
+         msg: "Enabling or disbling yum plugins completed"

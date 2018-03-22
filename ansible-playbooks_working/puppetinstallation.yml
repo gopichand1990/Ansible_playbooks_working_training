@@ -1,0 +1,19 @@
+---
+ - name: TO install puppet on Remote machines
+   hosts: all
+
+   pre_tasks:
+     - name: Debug message
+       debug:
+         msg: "started installing puppet on remote machines"
+    
+   roles:
+     - gopi.puppet
+   ignore_errors: true
+  
+   
+   post_tasks:
+     - name: debug message
+       debug:
+          msg: "completed installing  puppet on remote machines"
+

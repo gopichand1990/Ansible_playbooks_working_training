@@ -1,0 +1,21 @@
+---
+galaxy_info:
+  author: Gopichand
+  description: role for configuring http(s) network proxies
+  license:
+    - MIT
+  min_ansible_version: 2.0
+  platforms:
+    - name: EL
+      versions:
+        - 7
+    - name: Fedora
+      versions:
+        - 23
+    - name: Ubuntu
+      versions:
+        - xenial
+  galaxy_tags:
+    - networking
+dependencies: []
+  

@@ -1,0 +1,17 @@
+---
+ - name: TO configure sudo users on linux based machines
+   hosts: all
+
+   pre_tasks:
+     - name: debug message
+       debug:
+         msg: "starting configuring sudo users on linux machines"
+
+
+   roles:
+     - gopi.sudoers
+
+   post_tasks:
+     - name: debug message
+       debug:
+         msg: "completing configuring sudoers on linux machines"

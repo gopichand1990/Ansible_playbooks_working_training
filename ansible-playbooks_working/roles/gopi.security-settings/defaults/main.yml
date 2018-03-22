@@ -1,0 +1,70 @@
+# Password aging settings
+os_auth_pw_max_age: 60
+os_auth_pw_min_age: 10
+os_auth_pw_warn_age: 7
+passhistory: 6
+
+# Inactivity and Failed attempts lockout settings
+fail_deny: 5
+fail_unlock: 0
+inactive_lock: 0
+shell_timeout: 900
+solaris_accountunlock_dir: /usr/local
+
+# Password complexity settings
+pwquality_minlen: 8
+pwquality_maxrepeat: 3
+pwquality_lcredit: -1
+pwquality_ucredit: -1
+pwquality_dcredit: -1
+pwquality_ocredit: -1
+solaris_dictionary_minwordlength: 5
+
+# SSH settings
+sshrootlogin: 'yes'
+sshmainport: 22
+sshextraport: 0
+sshportforwarding: 'no'
+sshd_solaris_restrict_ipv4: True
+setloginbanner: true
+ssh_enforce_ciphers: true
+sha1_mac_enabled: false
+md5_mac_enabled: false
+truncated_mac_enabled: false
+cbc_ciphers_enabled: false
+sweet32_ciphers_enabled: false
+rc4_ciphers_enabled: false
+nist_curves_enabled: false
+logjam_sha1_enabled: false
+
+# Service and System settings
+selinux_state: permissive
+firewall_state: stopped
+firewall_enable: 'no'
+solaris_disable_services: false
+disable_ctrlaltdel: True
+firewall_check: false
+magic_sysrq: 1
+
+# Auditd configuration
+auditd_configure: true
+security_audit_datetime_changes: true
+security_audit_account_modifications: true
+security_audit_network_changes: true
+security_audit_selinux_changes: true
+security_audit_permission_changes: false
+security_audit_fileaccess_failedattempts: false
+security_audit_filesystem_mounts: true
+security_audit_deletions: false
+security_audit_sudoers: true
+security_audit_kernel_modules: false
+security_audit_logon: true
+security_audit_elevated_privilege_commands: true
+security_audit_all_commands: false
+security_audit_log_integrity: false
+security_audit_configuration_immutable: false
+auditd_max_log_filesize: 25
+auditd_num_logs: 8
+# The below variable will add whatever desired custom rules are wanted for audit
+#security_audit_custom_rules: |
+#  -w /etc/ -p wa -k config_integrity

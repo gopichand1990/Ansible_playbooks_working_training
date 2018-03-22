@@ -1,0 +1,11 @@
+# Copyright (c) Ontic. (http://www.ontic.com.au). All rights reserved.
+# See the COPYING file bundled with this package for license details.
+
+---
+
+- name: 'Cron | Enable Cron service.'
+  become: yes
+  service:
+    name: '{{ cron_service_name }}'
+    state: '{{ cron_service_state }}'
+    enabled: '{{ cron_service_enabled }}'

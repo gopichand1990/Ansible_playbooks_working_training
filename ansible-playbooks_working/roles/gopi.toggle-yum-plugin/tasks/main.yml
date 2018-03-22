@@ -1,0 +1,16 @@
+---
+- name: "Enabling {{ enable_plugins | join(', ') }} yum plugins"
+  ini_file:
+    dest: "/etc/yum/pluginconf.d/{{ item }}.conf"
+    section: main
+    option: enabled
+    value: 1
+  with_items: "{{ enable_plugins }}"
+
+- name: "Disabling {{ disable_plugins | join(', ') }} yum plugins"
+  ini_file:
+    dest: "/etc/yum/pluginconf.d/{{ item }}.conf"
+    section: main
+    option: enabled
+    value: 0
+  with_items: "{{ disable_plugins }}"

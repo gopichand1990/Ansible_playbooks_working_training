@@ -1,0 +1,21 @@
+---
+ - name: To check for software ugrades on ubuntu and install them
+   hosts: all
+   gather_facts: yes
+   become: yes
+   
+   pre_tasks:
+     - name: started checking and installing upgrades
+       debug:
+         msg: "started checking and installing upgrades"
+
+   roles:
+     - gopi.system-upgrade
+
+   post_tasks:
+     - name: completed installing upgrades if any
+       debug:
+         msg: "completed installing upgrades if found"
+
+   
+   

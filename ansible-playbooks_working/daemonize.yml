@@ -1,0 +1,16 @@
+---
+ - name: Installs Daemonize, a tool for running commands as a Unix daemon.
+   hosts: all
+  
+   pre_tasks:
+     - name: Installs Daemonize, a tool for running commands as a Unix daemon.
+       debug:
+         msg: "Starting installing daemonize tool to run commands as unix demon"
+    
+   roles:
+     - gopi.daemonize
+    
+   post_tasks:
+     - name: End of daemonize tool installation
+       debug:
+         msg: "End of daemonize tool installtion"

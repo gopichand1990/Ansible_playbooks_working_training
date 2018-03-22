@@ -1,0 +1,16 @@
+---
+ - name: TO configure open vpn for access onn linux based machines
+   hosts: all
+
+   pre_tasks:
+     - name: debug message start
+       debug:
+         msg: "vpn installation started"
+  
+   roles:
+     - gopi.openvpn_for_access
+
+   post_tasks:
+     - name: End of debug message
+       debug:
+         msg: "vpn configuring completed"

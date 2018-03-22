@@ -1,0 +1,16 @@
+---
+ - name: TO install vmware workstation on linux machines
+   hosts: all
+   
+   pre_tasks:
+     - name: debug message started
+       debug:
+         msg: "vmware installation on linux base servers started"
+    
+   roles:
+     - { role: gopi.ansible-role-vmware-workstation }
+
+   post_tasks:
+     - name: debug message ended
+       debug:
+         msg: "vmware installation finished"

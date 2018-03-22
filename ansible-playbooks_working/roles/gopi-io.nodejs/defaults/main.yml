@@ -1,0 +1,4 @@
+---
+node_user: "deploy"
+node_version: "v8.9.4"
+node_nvm_version: "v0.33.8"

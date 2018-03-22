@@ -1,0 +1,9 @@
+# Copyright (c) Ontic. (http://www.ontic.com.au). All rights reserved.
+# See the COPYING file bundled with this package for license details.
+
+---
+
+cron_default_packages:
+  - name: 'cronie'
+
+cron_default_service_name: 'crond'
