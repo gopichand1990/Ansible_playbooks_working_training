@@ -1,0 +1,630 @@
+//ansible lecture
+14th feb 2018
+devops:
+Ansible used for CICD:continuous integration configuration deployment 
+
+agentless architechture-built on python provided by Redhat(open source)
+building blocks:
+    1.modules(implemented on python-for unix and powershell for windows)-list of tasks
+	2.inventory-list of machines(static and dynamic)
+	3.plugins-within ansible tower for gui based
+	4.API-ansible tower's api to integrate with other services like service now.
+	
+	gui based is ansible tower(was not open source till october 2017 )provided by Redhat
+	the whole process happens via ssh or linux based machines and winrm for windows.
+workstation server-python should be available
+type Python in shell it should be available.
+type :sudo yum install ansible
+ 
+
+yum list install ansible
+ansible --version
+gives version of ansible
+configuraton files:set of instructions which loads predefined data like cmdb,default details,previlege esacaltion etc
+go to :cd /etc/ansible
+       ls -check whether ansible.cfg is available or not
+	   create a working directory for ansible
+	   mkdir home
+	   cd home
+	   mkdir student
+	   cd student
+	   mkdir dep-install
+	   cd dp-install
+	   
+	   5methods of configuration:
+	   
+	   default directory
+	   home directory
+	   working directory -recommended to setup in this directory for user purpose
+	   environment variable
+	   commandline-powerful we can do command line itself
+	   
+	   
+	   vim /etc/ansible/ansible.cfg
+	   mkdir inventory
+	   [
+	   
+	   
+	   cd inventory
+	   vi inventory
+	   This is static inventory we have given ip's that can be used
+	   create
+	   [dev]-indicates groupname when given in []
+	   put one ip
+	   leave one space
+	   [prod]
+	   put another
+	   leave space
+	   
+	 
+	   
+	   192.168.0.1
+	   
+	   put all ungrouped servers at top
+	   
+	   list ip's under groupname
+	   in ansible playbooks we can give this group name or all or ungrouped or just a single ip as per need
+	  
+	  ansible-playbook command is use for playbook execution
+	  ansible can be used for adhoc based commands example ansible --version
+	  eg:
+	  ansible all -i inventory/inventory --list -hosts
+	  lists all inventory ip's in dev group for testing to run any command
+	  need to check whether all servers are listing befor running playbook this is a prerequisite
+	  
+	  we can also try inheritance like we can give one new groupname and inherit ip's from another group 
+	  
+	  syntax is :
+	   ex:
+	   [windev]
+	   x
+	   y
+	   
+	   [unixdev]
+	   z
+	   k
+	   
+
+	   [dev:children]-this gives all severs in windev and unixdev,servers in dev ungrouped will be over ridden with windev and unixdev
+	   windev
+	   unixdev
+	   create inventory in our own directory
+	   vi ansible.cfg
+	   
+	   [defaults]
+	   inventory=/inventory/inventory.cfg
+	   
+	   need to check whether config file is user defined or not using 
+	   config file is defaultly changed to user defined file on loading directly
+	   ansible --version-check config file is user defined or not
+	   
+	   YAML(yet another markup language):
+	   playbook:is a series of tasks(using modules we create tasks)
+	   
+	   ansible-doc -l   lists all modules within ansible like in powershell we also have 
+	   help in ansible
+	   
+	   ansible-doc -l|grep "ping" to check whether ping module is ther are not
+	   ansible-doc ping we will get manual for ping module all modules are written in python all options are available in tsi module and also examples.
+	   
+	   modules can be execued in wo ways-adhoc based and playbook based
+	   adhoc based:
+	   to pass module directly to exectue it on adhoc based we have to gibe -m options
+	   eg:ansible -m ping
+	      ansible -m yum(to check software installed)
+		  ansible -m command(this option helps in giving command to ansible adhoc based commands)
+		  
+		  use case for adhoc based commands:(need to check installation apache on servers on environment and installing those software)
+		  1.need to check whether config file is pinging or not
+		  2.need to check whether all machines are loaded or not like in inventory they are present or not.
+		  command:
+		  ansible all -i inventory/inventory.cfg -m ping
+		  command:suoo yum install -y firewalld
+		  
+		  to run a command 
+		  
+		  ansible prod -m command -a  ' sudo yum install -y firewalld'
+		  
+		  
+				  
+	  playbook based:ansible-playbook sampl.yml
+	   
+
+
+workstation:SHA256:ixfelPKgGvQtSBhjXk1h/xyn+BhoRuArJaTc62k/8aU t_gopichand15@cs-6000-devshell-vm-f0901391-eb1b-41b3-a498-21c6e5a2baa8
+workstation1:SHA256:bzr/INdZiMPJ1+1mJcyzhsxLv2HlYt0ru+rCEmIQEmE t_gopichand15@work-station
+windows password:|2~}<0QYkXiP?Z!
+
+server-a:35.192.230.54
+server-b:35.192.130.238
+server-c:35.225.147.216
+server-d:35.226.46.33
+workstation:35.225.147.216
+windows:35.224.243.84
+
+keepvid
+
+16th feb 2018:  
+playbook:written in Yaml a declarative language, which is syntax driven based on inendation.written almost in plain english.it has series of plays.plays have series of tasks.each task will be implemented using one module.
+sample task:
+           SOP:
+		   1.httpd package is present in host machines
+		   2.copy html file to node machines from host machine
+		   3.httpd service is running
+		   
+playbook syntax:
+  synTAX:
+     ---
+      - name of play:
+	    hosts:
+	    tasks:
+		   - name: install_http_package
+		     yum:
+		       name:
+	     
+
+
+      to check for syntax errors:
+	  2 ways:
+	     1.ansible-playbook sample.yml --syntax -check(not reliable)
+		 2.manual
+		 
+	  inside vim need to change tab spaces which is 8spaces to 2 spaces;
+	  press :e $home/.vimrc
+	  file will be opened
+	  type
+	  autocmd Filetype yaml setlocal ai ts=2 sw=2 et
+	  
+	  or if above doesn't work then do this
+	  vi ~/.vimrc in root folder
+	  then type set ts=4 sw=4
+	  then :wq 
+	  
+	  
+	  playbook.yml
+	  ---
+	  - name: To configure webservers
+	    hosts: web
+		
+		tasks:
+		  - name: to configure HTTPD
+		     yum:
+			  - name: httpd
+			    state: present
+		 
+		 
+		 1.latest package of http and firewalld are present
+		 2.services are enabled 
+		 3.ensure firewalld is allowed to pass through httpd
+		 
+	variables:
+	1.host variable:for paricular host in inventory
+	2group variable:variable for a particular group
+	3playbook variable :decalred inside playbook done in key:value syntax  or vars_file(external file)
+	
+eg:in a case if we want to install multiple packages in some machines and we can't specify one by one as in earlier so we can give all variables in vars then we can use all the variables,syntax is as follows
+
+usercreation.yml
+
+---
+ - name: create a new user
+   hosts: web 
+   
+   #dynamic way in same file
+   vars:
+     user_name: devops
+	 user_comment: devops_admin
+   
+   tasks:
+     - name: create user '{{ user_name }}'
+	   user:
+	     name: devops
+		 state: present #static way
+ 
+ in same way we can define in seperate file and use it in above code
+
+
+---
+ - name: create a new user
+   hosts: web 
+   
+   #dynamic way in same file
+   varsfile:
+     myusers.yml
+	 #
+   
+   tasks:
+     - name: create user '{{ user_name }}'
+	   user:
+	     name: "{{ user_name }}"
+		 state: :{{ user_comment}}"
+		 
+#install multiple packages in multiple nodes using variables concept in ansible
+package_install.yml
+
+firewalld_package = firewall
+package_1: httpd
+package_2: php
+
+
+---
+ - name: install multiple packages
+   hosts: web 
+   
+   #dynamic way in same file
+   varsfile:
+     package_install.yml
+	 #
+   
+   tasks:
+     - name: install packages '{{ package_1 }}'
+	   yum:
+	     name: "{{ package_1 }}" #this is calling only one package at a time 
+		 #we can use multiple variables using looping which we can see later
+		 state: latest
+		 
+#firewall connection variable declared for group for connection_protocol http
+
+
+---
+ - name: install multiple packages
+   hosts: web 
+   
+   #dynamic way in same file
+   vars_files:
+     package_install.yml
+	 #
+   
+   tasks:
+     - name: install packages '{{ package_1 }}'
+	   yum:
+	     name: "{{ package_1 }}" #this is calling only one package at a time 
+		 #we can use multiple variables using looping which we can see later
+		 state: latest
+		 
+		 
+//to make sure that ssh is working
+ssh-keygen
+cat ~/.ssh/id_rsa.pub
+type password
+ssh root@35.192.230.54
+
+#example for group variable and host variable
+ssh-copy-id root@104.198.148.68
+
+//to copy keys
+https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-freebsd-server
+
+cat ~/.ssh/id_rsa.pub | ssh root@104.198.148.68 "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys"
+
+---
+ - name: configure webserver on remote hosts
+   hosts: web
+
+   tasks:
+     - name: check latest version of httpd package
+       yum:
+         - name: httpd
+           state: latest
+     - name: check latest version of firewalld package
+       yum:
+         - name: firewalld
+           state: latest
+~
+~
+19th feb 2018
+ansible gives rback capability which is role based access control
+ansible_facts.
+hostname:ansible_facts[ansible_nodename]
+ipv4_address:ansible_facts[ansible_all_ipv4_addresses]
+
+
+
+---
+ - name: to extract hostname and ipv4 address from setup file and display message
+   hosts: web
+
+   vars:
+     hostname: ansible_facts[ansible_nodename]
+     ipv4_address: ansible_facts[ansible_all_ipv4_addresses]
+
+   tasks:
+     -name: to get details of node machine in customised format
+      debug:
+        msg: hostname is "{{ hostname }}" and ipv4 address is "{{ ipv4_address }}"
+		
+		---
+ - name: to extract hostname and ipv4 address from setup file and display message
+   hosts: web
+
+   vars:
+     hostname: ansible_facts[ansible_nodename]
+     ipv4_address: ansible_facts[ansible_all_ipv4_addresses]
+
+   tasks:
+     -name: to get details of node machine in customised format
+      debug:
+        msg: hostname is "{{ hostname }}" and ipv4 address is "{{ ipv4_address }}"
+		
+		
+//by default in facts which we get after entering into setup module,which is in json format by default.
+we can even add custom facts that can be used by us .
+
+to get setup type following command 
+ansible all -m setup
+kernel_verion=ansible_facts.ansible_kernel
+version_os:ansible_facts.ansible_os_family
+cpu's:ansible_facts.ansible_processor_vcpus
+
+to create custom facts we have to create a file called facts.d and pushed into node 
+to path /etc/ansible/ Du407 certification
+
+to create custom facts we can do it in 2 ways 
+1.mkdir 19_feb_2018
+2.vi inventory place some files under test group
+3.create a config file
+4.ansible --version 
+5.vi custom.fact
+[packages]
+web_package = httpd
+db_package = php-mysql
+
+[user]
+user_name=debu
+6.vim push.yml
+---
+ - name:create dir and copy dir file 
+   hosts:test
+   
+   vars:
+     src_dir: custom.fact
+     dest_dir: /etc/ansible/facts.d
+   
+   tasks:
+     - name: to create a path "{{ dest_dir }}"
+	   file: 
+	     path: "{{ dest_dir}}" 
+         state:directory
+     - name:to copy custom files
+	   copy:
+	     src: "{{ src_dir }}"
+		 dest: "{{ dest_dir }}"
+7.ansible all -m setup -a "filter=ansible_local" to check whether data is pushed into newly created file for testing default file is ansible_local
+8.vim actual.yml
+---
+ - name: final playbook
+   hosts:test
+   tasks:
+     - name: to confirm keys and values
+	   debug: 
+	     msg: "Machine Name: {{ ansible_hostname }} and webpackage_name: {{ ansible_local.custom.packages.web_package }}" 
+		 //This way we have to access web_package which we have defined in userdefined file push.yml which in turn leads to custom data
+		 ansible_local.custom.packages.web_package
+9 check syntax o fact.yml
+
+package:httpd
+service:httpd
+	state:started	 
+
+~[package]
+package_name = httpd
+
+[service]
+service_name=httpd
+
+20thdeb 2018 revision morning session
+variables:
+   varible aspect:
+    1.scoping 
+	2.type
+	   1.task based variables:local to task 
+	    4.playbookvariable :global scope
+	   2.hostvariable:global scope created in inventory file 
+	   if we want to declare hostvariable in inventory
+	   ip package = php_mysql
+	   3.group variable:global scope created in inventory file
+	   if we want to declare groupvariable in inventory
+	   [web :vars] 
+	   package = php_mysql
+	   precedence is tasks level variable has first precedence  variable via command line is first preference
+	   
+	facts:
+	    information about managed hosts.we can get using setup module to get it and itis in json format:key:value format
+	   data we get when we type setup all predefined information .ansible_local is empty by default.if we write custom fact file all info is stored in ansible_local and we can make use of details under ansible_local.
+	   
+inclusion:
+          gives an option to create multiple playbooks and including them and multiple playbooks as in required order.
+		  
+		  include_vars is used for importing multiple yaml files.
+task:
+  create custom fact in ini format
+  packages and services
+  [package]
+  db_package
+	  
+configure custom fact using push.yml
+inclusion can be done using 2 modules 
+1.include:includes other playbook which contains series of tasks and plays.
+2.include_vars:includes variables which are  only yaml/json variables
+
+-to debug we need to give -vvvv like
+ansible-playbook playbook.yml -vvvv which gives detailed background execution of playbook step by step
+
+Register variable:
+            captures output of successful execution of playbook or even error in executing playbook.
+			keyword: register
+			
+---
+#example playbook for register variables
+ - name: basic
+   hosts: all
+   tasks:
+     - name: install postfix package
+       yum:
+         name: postfix
+         state: latest
+       register: output
+     - name: debugging
+       debug:
+         var: output
+#output variable stores execution output or details of playbook while execution if it is success success details else error.
+looping variable:
+    keyword:with_items , item
+	
+conditional:
+   keyword:when
+   conditionalexpression:
+     keywords:
+	    all logical operators and or not etc
+22 feb:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+23 feb:
+
+
+26th feb:
+jinja2 templating:
+      motd file-present in all unix machines which stands for message of the day.
+      file rendering service which will be copied to node machines while copying all variables will be replaced by respective values and then copied to motd files.we can use fact variables and local variables.when ever there are dependencies of configurations we use this jinja 2 templating.
+	  
+	  whenever we want to send some data to host file and repalce data from fact files to node machines we use jinja2 these all values will be replaced by value of variables which are specific to each node  and we can perform configuration change.
+	  
+roles:
+     it is group of directories under which we keep all our files which form a playbook.we can have many roles under single playbook.
+	 
+	 it has following directories and sub files in it.
+	 1.default directory-which contains a file which is main.yml in which we have to fill all default values in the form of key-value pairs
+	 2.files:
+	      This doesn't contain any files.if some files needed to be used somewhere in playbook default directory is files.
+	 3.handlers:
+	        this contains main.yml file in which we can define all tasks under handlers which are to be handled when notified.
+			this contains all handlers task definition.
+	 4.tasks:
+	      THis folder contains main.yml file where we define our main tasks that we want to implement in main playbook here we write even notify section also
+     5.metadata:
+	       Thsi folder contains a main.yml file where we write all details like who is author what are supported versions ,dependencies etc in foem of key value pairs.
+	 6.testing:
+	       This folder is for just for test execution.this can be used for sample tests execution where we can give sample version name of particular packeage and them test them againstparticular server.
+		   
+	7.vars:
+	    contains all keyvalues that need to be used in playbook in key value pairs.
+		   
+		   
+	To create all roles schema there is a command called 
+	ansible-galaxy init --offline myfirewall
+Galaxy:
+      well organised repository of playbooks.
+	  to search some playbook in ansible-playbook where predefined playbooks are present.
+	  ansible-galaxy search "*webserver*"
+	  ansible-galaxy install "davidwittman.redis" ti install playbook into local machine.we will get all data in form of roles.
+	  
+27-feb
+Dynamic inventory:
+    if we give a file which contains a list of hostnames or ip's then that is a static inventory.
+	 
+	if we wan't to get ip's from an script which is an executable script which is present in inventory file then it is a dynamic inventory.
+serialisation:
+   perform running of plays or tasks on 
+   forkes	:for config level paralellism present in default value which can be updated.
+   serial:to run tasks on multiple machines at a time scope is task level.
+   async:3600 this is timeout for a particular task which is user given
+   poll:10 poll is for no given no of seconds it will check statsu of jon async anf poll are given at a time.
+   delegate_to: if we eant to delegate play to particular host
+   async_status:
+   until:
+   retries:
+	  playbook troubleshooting:
+	    option --check works like whatif in powershell  tells
+		using debug
+		option --step:executes step by step while running playbook
+		option --start -at -task "name of  task"
+		verbose: option -vvvv gives detailed execution steps in background implementation.
+		
+	 previlege escalation:
+	    if we want to install a package on remote machine and then if we have only read access then we can use escalation matrix which needs to be mentioned in ansible.cfg
+		under defaults section:
+		become_user:root
+		ask_password :yes
+		command line ansible-playbook playbook.yml --b root --k
+		option --b to become particular user
+		--k to ask pass
+		
+	ansible vault:
+	     to encrypt ny sensitive data in playbook we use
+		 ansible-vault option and give password 
+		 and when we try to execute it will prompt for password
+		 we need to enter it to execute
+		
+		
+		
+		
+		cat ~/.ssh/id_rsa.pub | ssh root@35.225.66.187 "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys"
+        
+		
+		- hosts: all
+      sudo: true
+      roles:
+      - role: bennojoy.openldap_server
+        openldap_server_domain_name: example.com
+        openldap_server_rootpw: passme
+        openldap_server_enable_ssl: false
+hosts:   
+
+
+need to test:
+   -openldapserver.yml
+   
+   git 
+   jenkins
+   ansible or puppet or chef
+   docker
+     
+   
+bit.ly/itpamaws
+		
+		
+
+
+
+	   
+	   
+	   
+	  
+	  
+	 
+	  
+	   
+	   
+	   
+	   
+	
+
+	
